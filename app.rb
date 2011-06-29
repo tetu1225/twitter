@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'twitter'
 require 'pp'
+require 'uri'
 
 #パブリックタイムライン取得
 get '/public_timeline' do
@@ -32,4 +33,12 @@ end
 get 'home_timeline' do
 	@home_timeline = Twitter.home_timeline
 	erb :home_timeline
+end
+
+#URLをリンクにするメソッド
+def link_url (url)
+	str = url.dup
+	uri_reg = URI.regexp(%w[http https])
+	str.gsub!(uri_reg) {%Q{<a href="#{$&}" target="_blank">#{$&}</a>}}
+	return str
 end
